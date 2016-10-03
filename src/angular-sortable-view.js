@@ -398,10 +398,14 @@
 					opts = angular.extend({}, {
 						tolerance: 'pointer',
 						revert: 200,
-						containment: 'html'
+						containment: 'body'
 					}, opts);
 					if(opts.containment){
-						var containmentRect = closestElement.call($element, opts.containment)[0].getBoundingClientRect();
+						var containment = closestElement.call($element, opts.containment);
+						var containmentRect = containment[0].getBoundingClientRect();
+						// containmentRect.top = containmentRect2.top;
+						// containmentRect.left = containmentRect2.left;
+						containment.css('position','relative');
 					}
 
 					var target = $element;
@@ -435,18 +439,37 @@
 
 						var body = document.body;
 
+						// if(containmentRect){
+						// 	if(targetTop < containmentRect.top + body.scrollTop) // top boundary
+						// 		targetTop = containmentRect.top + body.scrollTop;
+						// 	if(targetTop + helperRect.height > containmentRect.top + body.scrollTop + containmentRect.height) // bottom boundary
+						// 		targetTop = containmentRect.top + body.scrollTop + containmentRect.height - helperRect.height;
+						// 	if(targetLeft < containmentRect.left + body.scrollLeft) // left boundary
+						// 		targetLeft = containmentRect.left + body.scrollLeft;
+						// 	if(targetLeft + helperRect.width > containmentRect.left + body.scrollLeft + containmentRect.width) // right boundary
+						// 		targetLeft = containmentRect.left + body.scrollLeft + containmentRect.width - helperRect.width;
+						// }
+
+
+						// this.style.left = targetLeft - body.scrollLeft + 'px';
+						// this.style.top = targetTop - body.scrollTop + 'px';
+
+						var containmentRectPos = containment.offset();
+						targetTop -=containmentRectPos.top;
+						targetLeft -=containmentRectPos.left;
+
 						if(containmentRect){
-							if(targetTop < containmentRect.top + body.scrollTop) // top boundary
-								targetTop = containmentRect.top + body.scrollTop;
-							if(targetTop + helperRect.height > containmentRect.top + body.scrollTop + containmentRect.height) // bottom boundary
-								targetTop = containmentRect.top + body.scrollTop + containmentRect.height - helperRect.height;
-							if(targetLeft < containmentRect.left + body.scrollLeft) // left boundary
-								targetLeft = containmentRect.left + body.scrollLeft;
-							if(targetLeft + helperRect.width > containmentRect.left + body.scrollLeft + containmentRect.width) // right boundary
-								targetLeft = containmentRect.left + body.scrollLeft + containmentRect.width - helperRect.width;
+							if(targetTop < 0) // top boundary
+								targetTop = 0;
+							if(targetTop + helperRect.height > containmentRect.height) // bottom boundary
+								targetTop = containmentRect.height - helperRect.height;
+							if(targetLeft < 0) // left boundary
+								targetLeft = 0;
+							if(targetLeft + helperRect.width  > containmentRect.width) // right boundary
+								targetLeft = containmentRect.width - helperRect.width;
 						}
-						this.style.left = targetLeft - body.scrollLeft + 'px';
-						this.style.top = targetTop - body.scrollTop + 'px';
+						this.style.left = targetLeft + 'px';
+						this.style.top = targetTop + 'px';
 					};
 
 					var pointerOffset = {
@@ -521,7 +544,7 @@
 	angular.element(document.head).append([
 		'<style>' +
 		'.sv-helper{' +
-			'position: fixed !important;' +
+			'position: absolute !important;' +
 			'z-index: 99999;' +
 			'margin: 0 !important;' +
 		'}' +

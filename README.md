@@ -46,7 +46,7 @@ The API is declarative. There are four directives (hooked on attributes) that ne
 				</ul>
 			</li>
   * `sv-part` - this attribute should be placed on an element that is a container for the `ngRepeat`'ed elements. Its value should be the same as the right hand side expression in `ng-repeat` attribute.
-  * `sv-element` - this attribute should be placed on the same element as `ng-repeat` attribute. Its (optional) value should be an expression that evaluates to the options object.
+  * `sv-element` - this attribute should be placed on the same element as `ng-repeat` attribute. Its (optional) value should be an expression that evaluates to the options object. (sv-element="{containment:'.class-name'}" is required. It is a wrapper containing only items to be sorted)
   * `sv-handle` - this attribute is optional. If needed it can be placed on an element within the sortable element. This element will be the handle for sorting operations.
   * `sv-helper` - the element with this attribute will serve as a custom helper for sorting operations
   * `sv-placeholder` - the element with this attribute will serve as a custom placeholder for sorting operations
